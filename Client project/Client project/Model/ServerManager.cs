@@ -25,24 +25,26 @@ namespace Client_project.Model
         public static async Task StartAsync(MainWindowVM vm)
         {
             _vm = vm;
-
+            TcpClient tcpClient = new TcpClient();
             //try to connect
+            tcpClient.Connect(point);
+            MessageBox.Show("connected!");
+            stream = tcpClient.GetStream();
+
             await Task.Run(() =>
             {
-                TcpClient tcpClient = new TcpClient();
-                tcpClient.Connect(point);
-                MessageBox.Show("connected!");
-                stream = tcpClient.GetStream();
-                WaitForBegin();
+                while (WaitForBegin());
             });
         }
-
-        private static void WaitForBegin()
+        
+        private static bool WaitForBegin()
         {
             byte[] answer = new byte[1];
             stream.Read(answer, 0, answer.Length);
+            if (answer[0] == 2) return false;
             GetStep();
             Loop();
+            return true;
         }
 
         private static void GetStep()

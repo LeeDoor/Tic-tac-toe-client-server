@@ -25,15 +25,29 @@ namespace Server_project
 		}
 
 		public void Start()
-		{
-			//randomizing first step
-			playerGoing = new Random().Next(0, 1);
+        {
+			do
+			{
+				field = new char[9]
+				{
+					'N','N','N','N','N','N','N','N','N'
+				};
+				//randomizing first step
+				playerGoing = new Random().Next(0, 1);
 
-			//send to players who is first 
-			players[0].SendSingleNumber(playerGoing == 0 ? 1 : 2);
-			players[1].SendSingleNumber(playerGoing == 1 ? 1 : 2);
-			GameLoop();
-		}
+				//send to players has match found
+				players[0].SendSingleNumber(1);
+				players[1].SendSingleNumber(1);
+
+				//send to players who is first 
+				players[0].SendSingleNumber(playerGoing == 0 ? 1 : 2);
+				players[1].SendSingleNumber(playerGoing == 1 ? 1 : 2);
+				GameLoop();
+			}
+			while (players[0].Stream.Socket.Connected && players[1].Stream.Socket.Connected); // loop while both connected
+            players[0].SendSingleNumber(2);// send to both players that game stopped
+            players[1].SendSingleNumber(2);
+        }
 
 		public void GameLoop()
 		{
@@ -47,6 +61,9 @@ namespace Server_project
 				//send game state
 				players[0].SendSingleNumber(winres != 0 && winres != 3 ? winres % 2 + 1 : winres);
 				players[1].SendSingleNumber(winres);
+
+				if (winres != 0) // if game ended
+					break;
 
 				int playerStep; 
 				bool isVerified;

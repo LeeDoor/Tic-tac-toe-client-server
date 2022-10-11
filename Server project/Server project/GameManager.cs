@@ -24,6 +24,7 @@ namespace Server_project
         {
             TcpListener server = new TcpListener(serverIpAdress);
             server.Start();
+            Console.WriteLine("server started");
 
             Queue<NetworkStream> queue = new();
             while (true)
@@ -43,18 +44,10 @@ namespace Server_project
             Player player1 = new Player(first);
             Player player2 = new Player(second);
 
-            MatchStartAlert(player1);
-            MatchStartAlert(player2);
-
             Game game = new Game(player1, player2);
             Console.WriteLine("game started!");
             game.Start();
             currentGames.Add(game);
-        }
-
-        private void MatchStartAlert(Player player)
-        {
-            player.Stream.Write(new byte[] { 1 });
         }
     }
 }
