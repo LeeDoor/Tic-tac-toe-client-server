@@ -47,6 +47,9 @@ namespace Server_project
             MatchStartAlert(player2);
 
             Game game = new Game(player1, player2);
+            game.Start();
+            Console.WriteLine("game started!");
+            currentGames.Add(game);
         }
 
         private void MatchStartAlert(Player player)

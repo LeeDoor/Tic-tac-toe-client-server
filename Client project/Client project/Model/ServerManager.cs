@@ -15,6 +15,7 @@ namespace Client_project.Model
         private const int PORT = 8000;
         private static IPEndPoint point = new IPEndPoint(IPAddress.Parse(IP_SERVER), PORT);
         private static NetworkStream stream;
+        private static bool isGoingNow;
 
         public static async Task StartAsync()
         {
@@ -33,7 +34,18 @@ namespace Client_project.Model
         {
             byte[] answer = new byte[1];
             stream.Read(answer, 0, answer.Length);
-            MessageBox.Show("begin");
+            GetStep();
+        }
+
+        private static void GetStep()
+        {
+            byte[] step = new byte[1];
+            stream.Read(step, 0, 1);
+            if (step[0] == 1)
+                isGoingNow = true;
+            else
+                isGoingNow = false;
+            MessageBox.Show(isGoingNow.ToString());
         }
     }
 }

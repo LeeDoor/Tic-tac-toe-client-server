@@ -15,5 +15,10 @@ namespace Server_project
         {
             Stream = stream;
         }
+
+        public void SendStep(bool isFirst)
+        {
+            Stream.Write(new byte[] { isFirst ? (byte)1 : (byte)2 });
+        }
     }
 }
