@@ -90,6 +90,13 @@ namespace Client_project.Model
             while (true)
             {
                 UpdateField();
+                //receive game state
+                int state = ReceiveSingleNumber();
+                if (state != 0)
+                {
+                    ResultNotification(state == 1);
+                    break;
+                }
                 if (isGoingNow)
                 {
                     _vm.IsActive = true;
@@ -97,13 +104,6 @@ namespace Client_project.Model
                     do result = ReceiveSingleNumber();
                     while (result != 1); // while not confirmed
                     _vm.IsActive = false;
-                }
-
-                int state = ReceiveSingleNumber();
-                if (state != 0)
-                {
-                    ResultNotification(state == 1);
-                    break;
                 }
 
                 isGoingNow = !isGoingNow;

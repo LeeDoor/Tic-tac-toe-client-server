@@ -40,6 +40,12 @@ namespace Server_project
             {
                 players[0].SendField(field);
                 players[1].SendField(field);
+
+                int winres = CheckIfWin();
+                //send game state
+                players[0].SendSingleNumber(winres != 0 ? winres % 2 + 1 : 0);
+                players[1].SendSingleNumber(winres);
+
                 int playerStep; 
                 bool isVerified;
                 do
@@ -49,12 +55,6 @@ namespace Server_project
                     players[playerGoing].SendSingleNumber(isVerified ? 1 : 2);
 
                 } while (!isVerified);
-
-                int winres = CheckIfWin();
-
-                //send game state
-                players[0].SendSingleNumber(winres != 0 ? winres % 2 + 1 : 0);
-                players[1].SendSingleNumber(winres);
 
                 playerGoing++;
                 playerGoing = playerGoing % 2;
