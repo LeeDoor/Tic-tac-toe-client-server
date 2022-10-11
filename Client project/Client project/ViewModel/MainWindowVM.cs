@@ -23,8 +23,18 @@ namespace Client_project.ViewModel
                 OnPropertyChanged(nameof(FieldValues));
             }
         }
+        private bool isActive;
+        public bool IsActive
+        {
+            get => isActive;
+            set
+            {
+                isActive = value;
+                OnPropertyChanged(nameof(IsActive));
+            }
+        }
 
-        private void SetActiveButton(int buttonId)
+        private void ButtonPress(int buttonId)
         {
             MessageBox.Show(buttonId.ToString());
         }
@@ -39,7 +49,7 @@ namespace Client_project.ViewModel
             string[] values = new string[9];
             for(int i = 0; i < 9; i++)
             {
-                values[i] = field[i].ToString();
+                values[i] = field[i] == 'N'?" " : field[i].ToString();
             }
             FieldValues = values;
         }
@@ -54,7 +64,7 @@ namespace Client_project.ViewModel
                 int id = i;
                 CellCommands[id] = new DelegateCommand(() =>
                 {
-                    SetActiveButton(id);
+                    ServerManager.SendCellInfo(id);
                 });
             }
 

@@ -61,9 +61,23 @@ namespace Client_project.Model
             _vm.UpdateField(fieldStr);
         }
 
+        public static void SendCellInfo(int id)
+        {
+            _vm.IsActive = false;
+            stream.Write(new byte[1] { (byte)id });
+        }
+
         private static void Loop()
         {
-            UpdateField();
+            while (true)
+            {
+                UpdateField();
+                if (isGoingNow)
+                {
+                    _vm.IsActive = true;
+                }
+                isGoingNow = !isGoingNow;
+            }
         }
     }
 }

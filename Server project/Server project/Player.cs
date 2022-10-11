@@ -30,5 +30,12 @@ namespace Server_project
             }
             Stream.Write(Encoding.UTF8.GetBytes(sb.ToString()));
         }
+
+        public int WaitForStep()
+        {
+            byte[] step = new byte[1];
+            Stream.Read(step);
+            return step[0];
+        }
     }
 }
