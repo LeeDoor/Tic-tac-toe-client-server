@@ -77,12 +77,14 @@ namespace Client_project.Model
             return state[0];
         }
 
-        private static void ResultNotification(bool isLoose)
+        private static void ResultNotification(int gameState)
         {
-            if (isLoose)
+            if (gameState == 1)
                 MessageBox.Show("you lose!");
-            else
+            else if (gameState == 2)
                 MessageBox.Show("you win!");
+            else
+                MessageBox.Show("tie!");
         }
 
         private static void Loop()
@@ -94,7 +96,7 @@ namespace Client_project.Model
                 int state = ReceiveSingleNumber();
                 if (state != 0)
                 {
-                    ResultNotification(state == 1);
+                    ResultNotification(state);
                     break;
                 }
                 if (isGoingNow)
