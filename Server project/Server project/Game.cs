@@ -36,31 +36,32 @@ namespace Server_project
 				playerGoing = new Random().Next(0, 1);
 
 				//send to players has match found
-				players[0].SendSingleNumber(1);
-				players[1].SendSingleNumber(1);
+				NetworkSendGet.SendByteArray(players[0], new byte[] { 1 });
+				NetworkSendGet.SendByteArray(players[1], new byte[] { 1 });
 
 				//send to players who is first 
-				players[0].SendSingleNumber(playerGoing == 0 ? 1 : 2);
-				players[1].SendSingleNumber(playerGoing == 1 ? 1 : 2);
+				NetworkSendGet.SendByteArray(players[0], new byte[] { playerGoing == 0 ? (byte)1 : (byte)2 });
+				NetworkSendGet.SendByteArray(players[1], new byte[] { playerGoing == 1 ? (byte)1 : (byte)2 });
 				GameLoop();
 			}
 			while (players[0].Stream.Socket.Connected && players[1].Stream.Socket.Connected); // loop while both connected
-            players[0].SendSingleNumber(2);// send to both players that game stopped
-            players[1].SendSingleNumber(2);
+
+            NetworkSendGet.SendByteArray(players[0], new byte[] { 2 });// send to both players that game stopped
+            NetworkSendGet.SendByteArray(players[1], new byte[] { 2 });
         }
 
 		public void GameLoop()
 		{
 			while (true)
 			{
-				//send field
-				players[0].SendField(field);
-				players[1].SendField(field);
+                //send field
+                NetworkSendGet.SendByteArray(players[0], field.Select(x => (byte)x).ToArray());
+				NetworkSendGet.SendByteArray(players[1], field.Select(x => (byte)x).ToArray());
 
 				int winres = CheckIfWin();
-				//send game state
-				players[0].SendSingleNumber(winres != 0 && winres != 3 ? winres % 2 + 1 : winres);
-				players[1].SendSingleNumber(winres);
+                //send game state
+                NetworkSendGet.SendByteArray(players[0], new byte[] { (byte)(winres != 0 && winres != 3 ? winres % 2 + 1 : winres) });
+				NetworkSendGet.SendByteArray(players[0], new byte[] { (byte)winres });
 
 				if (winres != 0) // if game ended
 					break;
@@ -69,9 +70,10 @@ namespace Server_project
 				bool isVerified;
 				do
 				{
-					playerStep = players[playerGoing].GetPlayerMove(); // gets player move choice
+					NetworkSendGet.GetCharArray(players[playerGoing], out byte[] bytes, 1);
+					playerStep = bytes[0]; // gets player move choice
 					isVerified = TryApplyMove(playerStep, playerGoing); // tries to apply player's move
-					players[playerGoing].SendSingleNumber(isVerified ? 1 : 2); // sends result to player to be able to resend info if needed
+					NetworkSendGet.SendByteArray(players[playerGoing], new byte[] { (byte)(isVerified ? 1 : 2) });// sends result to player to be able to resend info if needed
 				} while (!isVerified);
 
 				playerGoing++; // change current player;
