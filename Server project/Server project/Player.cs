@@ -20,5 +20,15 @@ namespace Server_project
         {
             Stream.Write(new byte[] { isFirst ? (byte)1 : (byte)2 });
         }
+
+        public void SendField(char[] field)
+        {
+            StringBuilder sb = new();
+            foreach(char c in field)
+            {
+                sb.Append(c);
+            }
+            Stream.Write(Encoding.UTF8.GetBytes(sb.ToString()));
+        }
     }
 }

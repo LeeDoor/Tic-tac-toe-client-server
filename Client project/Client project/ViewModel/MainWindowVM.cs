@@ -14,14 +14,40 @@ namespace Client_project.ViewModel
     public class MainWindowVM : INotifyPropertyChanged
     {
         public DelegateCommand[] CellCommands { get; set; }
+        private string[] fieldValues;
+        public string[] FieldValues {
+            get => fieldValues; 
+            set
+            {
+                fieldValues = value;
+                OnPropertyChanged(nameof(FieldValues));
+            }
+        }
 
         private void SetActiveButton(int buttonId)
         {
             MessageBox.Show(buttonId.ToString());
         }
 
+        private async void ConnectToServer()
+        {
+            await ServerManager.StartAsync(this);
+        }
+
+        public void UpdateField(string field)
+        {
+            string[] values = new string[9];
+            for(int i = 0; i < 9; i++)
+            {
+                values[i] = field[i].ToString();
+            }
+            FieldValues = values;
+        }
+
         public MainWindowVM()
         {
+            FieldValues = new string[9];
+
             CellCommands = new DelegateCommand[9];
             for(int i = 0; i < 9; i++)
             {
@@ -33,10 +59,6 @@ namespace Client_project.ViewModel
             }
 
             ConnectToServer();
-        }
-        private async void ConnectToServer()
-        {
-            await ServerManager.StartAsync();
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
