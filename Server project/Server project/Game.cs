@@ -19,7 +19,7 @@ namespace Server_project
 
             field = new char[9]
             {
-                'N','N','N','N','N','X','N','N','N'
+                'N','N','N','N','N','N','N','N','N'
             };
         }
 
@@ -43,6 +43,10 @@ namespace Server_project
                 int playerStep = players[playerGoing].WaitForStep();
                 ApplyMove(playerStep, playerGoing);
                 int winres = CheckIfWin();
+
+                players[0].SendGameState(winres != 0 ? winres % 2 + 1 : 0);
+                players[1].SendGameState(winres);
+
                 playerGoing++;
                 playerGoing = playerGoing % 2;
             }
@@ -53,7 +57,7 @@ namespace Server_project
             field[cell] = playerId == 0 ? 'X' : 'O';
         }
 
-        //-1 nobody, 0 - first, 1 - second
+        //0 nobody, 1 - first, 2 - second
         private int CheckIfWin()
         {
             for (int i = 0; i < 3; i++)
@@ -61,33 +65,33 @@ namespace Server_project
                 if (field[i * 3] == field[i * 3 + 1] && field[i * 3 + 1] == field[i * 3 + 2] && field[i * 3 + 1] != 'N')
                 {
                     if (field[i] == 'X')
-                        return 0;
-                    else
                         return 1;
+                    else
+                        return 2;
                 }
                 if (field[i] == field[i + 3] && field[i] == field[i + 6] && field[i] != 'N')
                 {
                     if (field[i] == 'X')
-                        return 0;
-                    else
                         return 1;
+                    else
+                        return 2;
                 }
             }
             if (field[0] == field[4] && field[0] == field[8] && field[0] != 'N')
             {
                 if (field[0] == 'X')
-                    return 0;
-                else
                     return 1;
+                else
+                    return 2;
             }
             if (field[2] == field[4] && field[2] == field[6] && field[2] != 'N')
             {
                 if (field[2] == 'X')
-                    return 0;
-                else
                     return 1;
+                else
+                    return 2;
             }
-            return -1;
+            return 0;
         }
     }
 }

@@ -37,5 +37,11 @@ namespace Server_project
             Stream.Read(step);
             return step[0];
         }
+
+        //0 nobody 1 loose 2 win
+        public void SendGameState(int id)
+        {
+            Stream.Write(new byte[] { (byte)(id) });
+        }
     }
 }

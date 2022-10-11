@@ -6,7 +6,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Client_project.Model
 {
@@ -67,6 +69,22 @@ namespace Client_project.Model
             stream.Write(new byte[1] { (byte)id });
         }
 
+        //0 nothing 1 loose 2 win
+        private static int ReceiveGameState()
+        {
+            byte[] state = new byte[1];
+            stream.Read(state);
+            return state[0];
+        }
+
+        private static void ResultNotification(bool isLoose)
+        {
+            if (isLoose)
+                MessageBox.Show("you lose!");
+            else
+                MessageBox.Show("you win!");
+        }
+
         private static void Loop()
         {
             while (true)
@@ -76,6 +94,14 @@ namespace Client_project.Model
                 {
                     _vm.IsActive = true;
                 }
+
+                int state = ReceiveGameState();
+                if(state != 0)
+                {
+                    ResultNotification(state == 1);
+                    break;
+                }
+
                 isGoingNow = !isGoingNow;
             }
         }
