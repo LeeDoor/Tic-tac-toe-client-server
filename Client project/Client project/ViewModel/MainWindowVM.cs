@@ -64,7 +64,7 @@ namespace Client_project.ViewModel
                 int id = i;
                 CellCommands[id] = new DelegateCommand(() =>
                 {
-                    ServerManager.SendCellInfo(id);
+                    ServerManager.SendSingleNumber(id);
                 });
             }
 

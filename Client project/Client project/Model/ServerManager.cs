@@ -63,14 +63,14 @@ namespace Client_project.Model
             _vm.UpdateField(fieldStr);
         }
 
-        public static void SendCellInfo(int id)
+        public static void SendSingleNumber(int id)
         {
-            _vm.IsActive = false;
             stream.Write(new byte[1] { (byte)id });
         }
 
+
         //0 nothing 1 loose 2 win
-        private static int ReceiveGameState()
+        private static int ReceiveSingleNumber()
         {
             byte[] state = new byte[1];
             stream.Read(state);
@@ -93,10 +93,14 @@ namespace Client_project.Model
                 if (isGoingNow)
                 {
                     _vm.IsActive = true;
+                    int result;
+                    do result = ReceiveSingleNumber();
+                    while (result != 1); // while not confirmed
+                    _vm.IsActive = false;
                 }
 
-                int state = ReceiveGameState();
-                if(state != 0)
+                int state = ReceiveSingleNumber();
+                if (state != 0)
                 {
                     ResultNotification(state == 1);
                     break;

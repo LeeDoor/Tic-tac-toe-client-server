@@ -16,11 +16,6 @@ namespace Server_project
             Stream = stream;
         }
 
-        public void SendStep(bool isFirst)
-        {
-            Stream.Write(new byte[] { isFirst ? (byte)1 : (byte)2 });
-        }
-
         public void SendField(char[] field)
         {
             StringBuilder sb = new();
@@ -31,15 +26,14 @@ namespace Server_project
             Stream.Write(Encoding.UTF8.GetBytes(sb.ToString()));
         }
 
-        public int WaitForStep()
+        public int GetPlayerMove()
         {
             byte[] step = new byte[1];
             Stream.Read(step);
             return step[0];
         }
 
-        //0 nobody 1 loose 2 win
-        public void SendGameState(int id)
+        public void SendSingleNumber(int id)
         {
             Stream.Write(new byte[] { (byte)(id) });
         }

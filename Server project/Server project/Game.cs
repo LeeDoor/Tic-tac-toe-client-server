@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 
 namespace Server_project
 {
@@ -28,8 +29,8 @@ namespace Server_project
             //randomizing first step
             playerGoing = new Random().Next(0, 1);
 
-            players[0].SendStep(playerGoing == 0);
-            players[1].SendStep(playerGoing == 1);
+            players[0].SendSingleNumber(playerGoing == 0 ? 1 : 2);
+            players[1].SendSingleNumber(playerGoing == 1 ? 1 : 2);
             GameLoop();
         }
 
@@ -39,22 +40,35 @@ namespace Server_project
             {
                 players[0].SendField(field);
                 players[1].SendField(field);
+                int playerStep; 
+                bool isVerified;
+                do
+                {
+                    playerStep = players[playerGoing].GetPlayerMove();
+                    isVerified = ApplyMove(playerStep, playerGoing);
+                    players[playerGoing].SendSingleNumber(isVerified ? 1 : 2);
 
-                int playerStep = players[playerGoing].WaitForStep();
-                ApplyMove(playerStep, playerGoing);
+                } while (!isVerified);
+
                 int winres = CheckIfWin();
 
-                players[0].SendGameState(winres != 0 ? winres % 2 + 1 : 0);
-                players[1].SendGameState(winres);
+                //send game state
+                players[0].SendSingleNumber(winres != 0 ? winres % 2 + 1 : 0);
+                players[1].SendSingleNumber(winres);
 
                 playerGoing++;
                 playerGoing = playerGoing % 2;
             }
         }
 
-        private void ApplyMove(int cell, int playerId)
+        private bool ApplyMove(int cell, int playerId)
         {
-            field[cell] = playerId == 0 ? 'X' : 'O';
+            if (field[cell] == 'N')
+            {
+                field[cell] = playerId == 0 ? 'X' : 'O';
+                return true;
+            }
+            return false;
         }
 
         //0 nobody, 1 - first, 2 - second
