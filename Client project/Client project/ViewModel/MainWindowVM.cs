@@ -13,6 +13,8 @@ namespace Client_project.ViewModel
 {
     public class MainWindowVM : INotifyPropertyChanged
     {
+        ServerManager serverManager = null!;
+
         public DelegateCommand[] CellCommands { get; set; }
         private string[] fieldValues;
         public string[] FieldValues {
@@ -41,7 +43,8 @@ namespace Client_project.ViewModel
 
         private async void ConnectToServer()
         {
-            await ServerManager.StartAsync(this);
+            serverManager = new();
+            await serverManager.StartAsync(this);
         }
 
         public void UpdateField(string field)
@@ -64,7 +67,7 @@ namespace Client_project.ViewModel
                 int id = i;
                 CellCommands[id] = new DelegateCommand(() =>
                 {
-                    ServerManager.SendSingleNumber(id);
+                    NetworkSendGet.SendByteArray(serverManager.stream, new byte[] { (byte)id });
                 });
             }
 

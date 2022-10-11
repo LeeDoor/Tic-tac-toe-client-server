@@ -61,7 +61,7 @@ namespace Server_project
 				int winres = CheckIfWin();
                 //send game state
                 NetworkSendGet.SendByteArray(players[0], new byte[] { (byte)(winres != 0 && winres != 3 ? winres % 2 + 1 : winres) });
-				NetworkSendGet.SendByteArray(players[0], new byte[] { (byte)winres });
+				NetworkSendGet.SendByteArray(players[1], new byte[] { (byte)winres });
 
 				if (winres != 0) // if game ended
 					break;

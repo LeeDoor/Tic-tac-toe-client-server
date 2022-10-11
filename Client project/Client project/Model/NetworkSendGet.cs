@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
-namespace Server_project
+namespace Client_project.Model
 {
     public static class NetworkSendGet
     {
-        public static bool SendByteArray(Player player, byte[] arr) => SendByteArray(player.Stream, arr);
         public static bool SendByteArray(Stream stream, byte[] arr)
         {
             try
             {
                 stream.Write(arr);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
@@ -23,7 +19,6 @@ namespace Server_project
             return true;
         }
 
-        public static bool GetCharArray(Player player, out byte[] arr, int size) => GetCharArray(player.Stream, out arr, size);
         public static bool GetCharArray(Stream stream, out byte[] arr, int size)
         {
             arr = new byte[size];
