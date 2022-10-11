@@ -1,0 +1,32 @@
+﻿<Window x:Class="Client_project.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client_project"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="500">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding CellCommands[0]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding CellCommands[1]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="0" Grid.Column="2" Command="{Binding CellCommands[2]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="1" Grid.Column="0" Command="{Binding CellCommands[3]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="1" Grid.Column="1" Command="{Binding CellCommands[4]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="1" Grid.Column="2" Command="{Binding CellCommands[5]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="2" Grid.Column="0" Command="{Binding CellCommands[6]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="2" Grid.Column="1" Command="{Binding CellCommands[7]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding CellCommands[8]}" Margin="5" Background="White" BorderBrush="Transparent" Content="O" FontSize="60"></Button>
+    </Grid>
+</Window>

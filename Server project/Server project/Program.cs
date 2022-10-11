@@ -1,2 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using Server_project;
+
+public static class Program
+{
+    public static void Main()
+    {
+        GameManager manager = new();
+        manager.StartServer();
+    }
+}

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Client_project.ViewModel;
 
 namespace Client_project
 {
@@ -23,6 +24,8 @@ namespace Client_project
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = new MainWindowVM();
         }
     }
 }
