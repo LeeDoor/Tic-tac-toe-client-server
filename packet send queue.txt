@@ -1,9 +1,0 @@
-1. accept
-2. write "your match found" (1)
-3. write is first or second move (1 - first 'X', 2 - second 'O')
-
---loop
-4. send field (string like: "NNNXOONNN" where 'N' is empty, 'X' is X, 'O' is O)
-5. waiting for step (int of cell) from moving player
-6. send game state (has someone win)
---

@@ -1,0 +1,11 @@
+﻿1. accept
+2. write “your match found” (1)
+3. write to players are they first or second (1 - first ‘X’, 2 - second 'O')
+4. loop:
+   1. send field(string like: "NNNXOONNN" where 'N' is empty, 'X' is X, 'O' is O)
+   2. loop, while not accepted
+      1. waiting for step of user (number of cell) from moving player
+      2. send info about verification (1 is confirmed)
+   3. send game state
+
+google docs link for everyone: https://docs.google.com/document/d/1QwkRBrnRfIdqKjGXN24Iucl-UHZF7jYoydFCanpISbo/edit?usp=sharing
