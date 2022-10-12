@@ -30,12 +30,17 @@ namespace Server_project
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
-                queue.Enqueue(client.GetStream());
-                Console.WriteLine("user connected");
-                if(queue.Count >= 2)
+                Task.Run(() =>
                 {
-                    StartGame(queue.Dequeue(), queue.Dequeue());
-                }
+                    queue.Enqueue(client.GetStream());
+                    Console.WriteLine("user connected");
+                    if (queue.Count >= 2)
+                    {
+                        NetworkStream s1 = queue.Dequeue();
+                        NetworkStream s2 = queue.Dequeue();
+                        StartGame(s1, s2);
+                    }
+                });
             }
         }
 
