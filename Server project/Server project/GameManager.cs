@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Net;   
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +10,16 @@ namespace Server_project
 {
     public class GameManager
     {
-        private int port = 8000;
+        private string ipadressPath = "ServerIpPort.txt";
         private IPEndPoint serverIpAdress;
 
         private List<Game> currentGames = new();
 
         public GameManager()
         {
-            serverIpAdress = new IPEndPoint(IPAddress.Parse("192.168.1.57"), port);
+            string curDir = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            string[] ipAndPort = File.ReadAllLines(curDir + "\\" + ipadressPath);
+            serverIpAdress = new IPEndPoint(IPAddress.Parse(ipAndPort[0]), int.Parse(ipAndPort[1]));
         }
 
         public void StartServer()

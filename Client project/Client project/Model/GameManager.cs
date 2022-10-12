@@ -13,11 +13,17 @@ namespace Client_project.Model
     {
         private MainWindowVM _vm;
 
-        private const string IP_SERVER = "192.168.1.57";
-        private const int PORT = 8000;
-        private IPEndPoint point = new IPEndPoint(IPAddress.Parse(IP_SERVER), PORT);
+        private string ipadressAndPort = "ServerIpPort.txt";
+        private IPEndPoint point;
         public NetworkStream stream;
         private bool isGoingNow;
+
+        public GameManager()
+        {
+            string curDir = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            string[] ipAndPort = File.ReadAllLines(curDir + "\\" + ipadressAndPort);
+            point = new IPEndPoint(IPAddress.Parse(ipAndPort[0]), int.Parse(ipAndPort[1]));
+        }
 
         public async Task StartAsync(MainWindowVM vm)
         {
