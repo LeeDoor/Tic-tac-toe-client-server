@@ -45,11 +45,6 @@ namespace Client_project.Model
             });
         }
 
-        private void Disconnect()
-        {
-            MessageBox.Show("your enemy disconnected. technical win");
-        }
-        
         private bool WaitForBegin()
         {
             NetworkSendGet.GetCharArray(stream, out byte[] answer, 1);
@@ -57,32 +52,6 @@ namespace Client_project.Model
             GetStep();
             Loop();
             return true;
-        }
-
-        private void GetStep()
-        {
-            NetworkSendGet.GetCharArray(stream, out byte[] step, 1);
-            if (step[0] == 1)
-                isGoingNow = true;
-            else
-                isGoingNow = false;
-        }
-
-        private void UpdateField()
-        {
-            NetworkSendGet.GetCharArray(stream, out byte[] field, 9);
-            string fieldStr = Encoding.UTF8.GetString(field);
-            _vm.UpdateField(fieldStr);
-        }
-
-        private void ResultNotification(int gameState)
-        {
-            if (gameState == 1)
-                MessageBox.Show("you lose!");
-            else if (gameState == 2)
-                MessageBox.Show("you win!");
-            else
-                MessageBox.Show("tie!");
         }
 
         private void Loop()
@@ -113,6 +82,37 @@ namespace Client_project.Model
 
                 isGoingNow = !isGoingNow;
             }
+        }
+
+        private void UpdateField()
+        {
+            NetworkSendGet.GetCharArray(stream, out byte[] field, 9);
+            string fieldStr = Encoding.UTF8.GetString(field);
+            _vm.UpdateField(fieldStr);
+        }
+
+        private void GetStep()
+        {
+            NetworkSendGet.GetCharArray(stream, out byte[] step, 1);
+            if (step[0] == 1)
+                isGoingNow = true;
+            else
+                isGoingNow = false;
+        }
+
+        private void ResultNotification(int gameState)
+        {
+            if (gameState == 1)
+                MessageBox.Show("you lose!");
+            else if (gameState == 2)
+                MessageBox.Show("you win!");
+            else
+                MessageBox.Show("tie!");
+        }
+
+        private void Disconnect()
+        {
+            MessageBox.Show("your enemy disconnected. technical win");
         }
     }
 }
