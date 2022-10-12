@@ -19,10 +19,29 @@ namespace Server_project
 			players = new Player[2] { player1, player2 };
 		}
 
-		private void ConnectionDeniedNotify()
-		{
-            NetworkSendGet.SendByteArray(players[0], new byte[] { 2 });// send to both players that game stopped
-            NetworkSendGet.SendByteArray(players[1], new byte[] { 2 });
+        #region server manipulation
+        private void ConnectionDeniedNotify()
+        {// send to both players that game stopped
+            try
+            {
+                NetworkSendGet.SendByteArray(players[0], new byte[] { byte.MaxValue });
+            }
+            catch (Exception ex)
+            {
+                if (ex is IOException)
+                    Console.WriteLine("user1 disconnected");
+                else throw;
+            }
+            try
+            {
+                NetworkSendGet.SendByteArray(players[1], new byte[] { byte.MaxValue });
+            }
+            catch (Exception ex)
+            {
+                if (ex is IOException)
+                    Console.WriteLine("user2 disconnected");
+                else throw;
+            }
         }
 		private void MatchStartedNotify() 
 		{
@@ -112,19 +131,17 @@ namespace Server_project
                 return 3;
             return 0; // keep going
         }
+        #endregion
 
         private void GameLoop()
         {
             while (true)
             {
                 FieldChangesNotify(); // send field to both players
-
                 int winres = CheckIfWin();
                 GameStateNotify(winres); // check if game stopped and notify players
-
                 if (winres != 0) // if game ended
                     break;
-
                 bool isVerified;
                 do StepGetAndVerification(out isVerified); // prepare a step
                 while (!isVerified);
@@ -136,13 +153,22 @@ namespace Server_project
         {
 			do
 			{
-				field = new char[9]
-				{
-					'N','N','N','N','N','N','N','N','N'
-				};
-				MatchStartedNotify();
-                StepPositionNotify();
-                GameLoop();
+                try
+                {
+                    field = new char[9]
+                    {
+                    'N','N','N','N','N','N','N','N','N'
+                    };
+                    MatchStartedNotify();
+                    StepPositionNotify();
+                    GameLoop();
+                }
+                catch (Exception ex)
+                {
+                    if (ex is IOException)
+                        break;
+                    else throw;
+                }
 			}
 			while (players[0].Stream.Socket.Connected && players[1].Stream.Socket.Connected); // loop while both connected
 			ConnectionDeniedNotify();

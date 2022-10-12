@@ -13,7 +13,7 @@ namespace Client_project.ViewModel
 {
     public class MainWindowVM : INotifyPropertyChanged
     {
-        ServerManager serverManager = null!;
+        GameManager serverManager = null!;
 
         public DelegateCommand[] CellCommands { get; set; }
         private string[] fieldValues;

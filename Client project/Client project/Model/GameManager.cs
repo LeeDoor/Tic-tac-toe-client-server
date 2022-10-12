@@ -5,10 +5,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System;
 
 namespace Client_project.Model
 {
-    public class ServerManager
+    public class GameManager
     {
         private MainWindowVM _vm;
 
@@ -29,14 +30,30 @@ namespace Client_project.Model
 
             await Task.Run(() =>
             {
-                while (WaitForBegin());
+                try
+                {
+                    while (WaitForBegin());
+                }
+                catch (Exception ex)
+                {
+                    if (ex is IOException)
+                    {
+                        Disconnect();
+                    }
+                    else throw;
+                }
             });
+        }
+
+        private void Disconnect()
+        {
+            MessageBox.Show("your enemy disconnected. technical win");
         }
         
         private bool WaitForBegin()
         {
             NetworkSendGet.GetCharArray(stream, out byte[] answer, 1);
-            if (answer[0] == 2) return false;
+            if (answer[0] == byte.MaxValue) return false;
             GetStep();
             Loop();
             return true;
